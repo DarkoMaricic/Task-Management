@@ -1,0 +1,124 @@
+﻿@model TaskManagement.ViewModels.TaskViewModel
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm()) {
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <h4>Tasks</h4>
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Task.Id)
+
+
+
+
+    @if (User.IsInRole("Administrator") || User.IsInRole("Project Manager"))
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Task.Deadline, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class='col-md-10'>
+                @Html.TextBoxFor(model => model.Task.Deadline, new { @class = "form-control", @id = "datetimepicker2" })
+            </div>
+            @Html.ValidationMessageFor(model => model.Task.Deadline)
+        </div>
+
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.Task.Deadline)
+    }
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Task.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Task.Description, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Task.Description, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    @if (User.IsInRole("Administrator"))
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Task.ProjectId, "Project", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Task.ProjectId, Model.ProjectsSelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Task.ProjectId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.Task.ProjectId)
+    }
+
+
+    @if (User.IsInRole("Administrator") || User.IsInRole("Project Manager"))
+    {
+        <div class="form-group">
+            @Html.LabelFor(model => model.Task.UserId, "Assignee", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Task.UserId, Model.UsersSelectList, htmlAttributes: new { @class = "form-control" }, optionLabel: "[not selected]")
+                @Html.ValidationMessageFor(model => model.Task.UserId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+    }
+    else
+    {
+        @Html.HiddenFor(model => model.Task.UserId)
+    }
+
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Task.StatusId, "Status", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(model => model.Task.StatusId, Model.StatusesSelectList, htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Task.StatusId, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Task.Progress, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Task.Progress, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Task.Progress, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group text-danger">
+        @Model.ErrorMessage
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" value="Save" class="btn btn-default" />
+        </div>
+    </div>
+</div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section scripts {
+
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker2').datetimepicker({
+                format: "DD.MM.YYYY"
+            });
+        });
+    </script>
+}

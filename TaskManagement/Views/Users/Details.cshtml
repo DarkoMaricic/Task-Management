@@ -1,0 +1,53 @@
+﻿@model TaskManagement.Models.ApplicationUser
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details of user</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+
+        <dt>
+            Firstname
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
+
+        <dt>
+           Surname
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SurName)
+        </dd>
+
+        <dt>
+           Username
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+
+        <dt>
+           Email
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+           Role
+        </dt>
+        <dd>
+            @ViewBag.Role
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

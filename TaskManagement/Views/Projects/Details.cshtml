@@ -1,0 +1,46 @@
+﻿@model TaskManagement.Models.Project
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Project</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Project code:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProjectCode)
+        </dd>
+
+        <dt>
+            Project name:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ProjectName)
+        </dd>
+
+        <dt>
+            User name:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.User.UserName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @if (User.IsInRole("Administrator")) {
+
+        @Html.ActionLink("Edit", "Edit", new { id = Model.Id })
+    }
+
+    | @Html.ActionLink("Back to List", "Index")
+</p>

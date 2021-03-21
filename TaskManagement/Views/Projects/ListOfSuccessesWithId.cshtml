@@ -1,0 +1,44 @@
+﻿@model TaskManagement.ViewModels.ProjectViewModel
+
+
+@{
+    ViewBag.Title = "ListOfSuccessesWithId";
+}
+
+<h2>ListSuccessesWithId</h2>
+
+<div>
+    <h4></h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Project code:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.ProjectCode)
+        </dd>
+
+        <dt>
+            Project name:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Project.ProjectName)
+        </dd>
+
+        <dt>
+            Progress (%):
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Progress) %
+        </dd>
+
+    </dl>
+</div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
