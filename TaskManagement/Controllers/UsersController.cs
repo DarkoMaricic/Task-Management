@@ -41,9 +41,9 @@ namespace TaskManagement.Controllers
 
             var rolesSelectList = DbManager.GetRolesSelectList();
 
-            var userViewModel = new AssignRoleViewModel(currentRole, rolesSelectList, userId, username);
+            var viewModel = new AssignRoleViewModel(currentRole, rolesSelectList, userId, username);
 
-            return View(userViewModel);
+            return View(viewModel);
         }
 
 
@@ -185,13 +185,20 @@ namespace TaskManagement.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = userViewModel.User;
+                var user = new ApplicationUser() {
+                    Email = userViewModel.Email, 
+                    FirstName = userViewModel.FirstName,
+                    SurName = userViewModel.SurName,
+                    UserName = userViewModel.UserName
+                };
+
                 DbManager.AddUser(user, userViewModel.Password, userViewModel.RoleName);
                 return RedirectToAction("Index");
                 
 
             }
-            
+            var rolesSelectList = DbManager.GetRolesSelectList();
+            userViewModel.RolesSelectList = rolesSelectList;
             return View(userViewModel);
         }
 

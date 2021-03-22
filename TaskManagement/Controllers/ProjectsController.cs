@@ -138,7 +138,12 @@ namespace TaskManagement.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Edit(ProjectViewModel projectViewModel)
         {
+            var project = DbManager.GetProjectByProjectCode(projectViewModel.Project.ProjectCode);
 
+            if (project != null)
+            {
+                ModelState.AddModelError("Project.ProjectCode", "Project code allready exists!");
+            }
             if (ModelState.IsValid)
             {
                 DbManager.EditProject(projectViewModel.Project);

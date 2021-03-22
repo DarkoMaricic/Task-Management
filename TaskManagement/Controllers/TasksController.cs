@@ -46,14 +46,15 @@ namespace TaskManagement.Controllers
             var tasksList = new List<Tasks>();
             if (isAdministrator)
             {
-                 tasksList = DbManager.GetAllTasks();
+                tasksList = DbManager.GetAllTasks();
             }
-            else {
-                 tasksList = DbManager.GetTasksForUser(currentUserId);               
+            else
+            {
+                tasksList = DbManager.GetTasksForUser(currentUserId);
             }
             return View(tasksList);
         }
-           
+
 
 
         [Authorize(Roles = "Administrator")]
@@ -74,7 +75,7 @@ namespace TaskManagement.Controllers
         public ActionResult AssignTask(Tasks tasks)
         {
 
-     
+
             if (ModelState.IsValid)
             {
 
@@ -112,7 +113,8 @@ namespace TaskManagement.Controllers
             var currentUserId = User.Identity.GetUserId();
             var rolesList = new List<string>();
             rolesList.Add("Developer");
-            if (UserManager.GetRoles(currentUserId).Contains("Administrator")) {
+            if (UserManager.GetRoles(currentUserId).Contains("Administrator"))
+            {
                 rolesList.Add("Project Manager");
             }
 
@@ -143,7 +145,7 @@ namespace TaskManagement.Controllers
             }
 
             if (ModelState.IsValid)
-            { 
+            {
                 //on task creating, we are setting task status: new
                 taskViewModel.Task.StatusId = 1;
                 DbManager.AddTask(taskViewModel.Task);
@@ -159,7 +161,7 @@ namespace TaskManagement.Controllers
             {
                 rolesList.Add("Project Manager");
             }
-            
+
             taskViewModel.ProjectsSelectList = DbManager.GetProjectsSelectList();
             taskViewModel.StatusesSelectList = DbManager.GetStatusSelectList();
             taskViewModel.UsersSelectList = DbManager.GetUsersSelectList(rolesList);
@@ -188,7 +190,7 @@ namespace TaskManagement.Controllers
             var statusesList = DbManager.GetStatusSelectList();
             var usersList = DbManager.GetUsersSelectList(rolesList);
 
-            var viewModel = new TaskViewModel(task,projectsList,statusesList,usersList);
+            var viewModel = new TaskViewModel(task, projectsList, statusesList, usersList);
 
             return View(viewModel);
         }
@@ -201,20 +203,18 @@ namespace TaskManagement.Controllers
         [Authorize(Roles = "Administrator, Project Manager, Developer")]
         public ActionResult Edit(TaskViewModel taskViewModel)
         {
+            //checking if user has more than 3 tasks
+            var userId = taskViewModel.Task.UserId;
+            var count = DbManager.GetNumberOfTasksOfUser(userId);
+            if (count > 3)
+            {
+                ModelState.AddModelError("Task.UserId", "Select another assigne! This one has 3 tasks assigned!");
+            }
 
             if (ModelState.IsValid)
             {
-                //checking if user has more than 3 tasks
-                var userId = taskViewModel.Task.UserId;
-                var count = DbManager.GetNumberOfTasksOfUser(userId);
-                if (count < 3) {
-                    DbManager.EditTask(taskViewModel.Task);
-                    return RedirectToAction("Index");
-                }
-                else {
-                    ModelState.AddModelError("Task.UserId", "Select another assigne! This one has 3 tasks assigned!");
-                }
-
+                DbManager.EditTask(taskViewModel.Task);
+                return RedirectToAction("Index");
             }
 
             var currentUserId = User.Identity.GetUserId();
@@ -261,8 +261,8 @@ namespace TaskManagement.Controllers
             return RedirectToAction("Index");
         }
 
-     
 
-       
+
+
     }
 }
