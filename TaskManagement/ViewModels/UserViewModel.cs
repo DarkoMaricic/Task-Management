@@ -13,6 +13,7 @@ namespace TaskManagement.ViewModels
     public class UserViewModel
     {
         public List<SelectListItem> RolesSelectList { get; set; }
+
         public string RoleName { get; set; }
 
         [Required]

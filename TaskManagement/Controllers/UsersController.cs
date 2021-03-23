@@ -152,7 +152,12 @@ namespace TaskManagement.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Edit(ApplicationUser user)
         {
+            var u = DbManager.GetUserByUserName(user.UserName);
 
+            if (u != null)
+            {
+                ModelState.AddModelError("UserName", "This user name allready exists!");
+            }
             if (ModelState.IsValid)
             {
 
@@ -182,6 +187,12 @@ namespace TaskManagement.Controllers
         [Authorize(Roles = "Administrator")]
         public ActionResult Create(UserViewModel userViewModel)
         {
+            var u = DbManager.GetUserByUserName(userViewModel.UserName);
+
+            if (u != null)
+            {
+                ModelState.AddModelError("UserName", "This user name allready exists!");
+            }
 
             if (ModelState.IsValid)
             {

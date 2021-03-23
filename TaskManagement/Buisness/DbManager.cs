@@ -289,6 +289,15 @@ namespace TaskManagement.Buisness
             }
         }
 
+        public static ApplicationUser GetUserByUserName(String userName)
+        {
+            using (var context = new ApplicationDbContext())
+            {
+                var user = context.Users.FirstOrDefault( u => u.UserName == userName);
+                return user;
+            }
+        }
+
 
         public static void DeleteUser(ApplicationUser user)
         {
@@ -358,8 +367,12 @@ namespace TaskManagement.Buisness
             using (var context = new ApplicationDbContext())
             {
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
-                userManager.Create(user, password);
-                userManager.AddToRole(user.Id, roleName);
+
+                var result = userManager.Create(user, password);
+                if (result.Succeeded) {
+                    userManager.AddToRole(user.Id, roleName);
+                }
+                
             }
         }
         

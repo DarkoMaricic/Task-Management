@@ -147,7 +147,7 @@ namespace TaskManagement.Controllers
             if (ModelState.IsValid)
             {
                 //on task creating, we are setting task status: new
-                taskViewModel.Task.StatusId = 1;
+                taskViewModel.Task.StatusId = (int) Statuses.New;
                 DbManager.AddTask(taskViewModel.Task);
                 return RedirectToAction("Index");
 
