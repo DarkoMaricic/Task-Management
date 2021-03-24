@@ -2,14 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskManagement;
 using TaskManagement.Models;
 using TaskManagement.Controllers;
 using System.Web.Mvc;
+using TaskManagement.ViewModels;
 
-namespace TaskManagement.Tests.Controllers {
+namespace TaskManagement.Tests.Controllers
+{
 
     [TestClass]
     public class ProjectsControllerTest {
@@ -33,17 +32,46 @@ namespace TaskManagement.Tests.Controllers {
     
         }
 
+
+        [TestMethod]
+        public void Create()
+        {
+
+            //Creating new object of type Project
+            Project project = new Project();
+
+            //Assigning values to our object
+            project.ProjectCode = DateTime.Now.ToString();
+            project.ProjectName = "Test Name";
+
+            ProjectViewModel projectViewModel = new ProjectViewModel();
+            projectViewModel.Project = project;
+
+            //Creating instance of ProjectController
+            var projectController = new ProjectsController();
+
+            //Creating object of type RedirectToRouteResult because after calling post method CREATE, it returns RedirectToAction
+            RedirectToRouteResult result = projectController.Create(projectViewModel) as RedirectToRouteResult;
+
+            //Checking if Create method redirects to Index() page after execution
+            Assert.AreEqual("Index", result.RouteValues["Action"]);
+
+            //Checking if result value is not null
+            Assert.IsNotNull(result.ToString());
+        }
+
+
         [TestMethod]
         public void Details() {
 
-            //Selecting Project from DB with Id = 1
-            var project = db.Projects.Find(1);
+            //Selecting Project from DB with Id
+            var projectId = db.Projects.First().Id;
 
             //Creating instance of ProjectController
             var projectController = new ProjectsController();
 
             //Calling Details() function from ProjectController and casted it to ViewResult
-            ViewResult result = projectController.Details(1) as ViewResult;
+            ViewResult result = projectController.Details(projectId) as ViewResult;
 
             //Casting View model to actual object type in order to access its attributes for comparison
             var pr = (Project) result.ViewData.Model;
@@ -52,56 +80,10 @@ namespace TaskManagement.Tests.Controllers {
             Assert.IsInstanceOfType(result.ViewData.Model, typeof(Project));
 
             //Checking if project Id we got from our View is equal to our selected Project from DB
-            Assert.AreEqual(project.Id, pr.Id);
+            Assert.AreEqual(projectId, pr.Id);
 
         }
 
-        [TestMethod]
-        public void Create() {
-
-            //Creating new object of type Project
-            Project project = new Project();
-
-            //Assigning values to our object
-            project.ProjectCode = "Test Code";
-            project.ProjectName = "Test Name";
-
-            //Creating instance of ProjectController
-            var projectController = new ProjectsController();
-            
-            //Creating object of type RedirectToRouteResult because after calling post method CREATE, it returns RedirectToAction
-            RedirectToRouteResult result = projectController.Create(project) as RedirectToRouteResult;
-
-            //Checking if Create method redirects to Index() page after execution
-            Assert.AreEqual("Index", result.RouteValues["Action"]);
-
-            //Checking if result value is not null
-            Assert.IsNotNull(result.ToString());
-
-        }
-
-        //[TestMethod]
-        //public void DeleteConfirmed() {
-
-        //    //Selecting project from DBContext with Id = 3
-        //    var project = db.Projects.Find(20);
-
-        //    //Creating instance of ProjectController
-        //    var projectController = new ProjectsController();
-
-        //    //Creating object of type RedurectToRouteResult because after calling method DeleteConfirmed, it returns RedirectToAction
-        //    RedirectToRouteResult result = projectController.DeleteConfirmed(project.Id) as RedirectToRouteResult;
-
-        //    //Checking if DeleteConfirmed method redirects to Index() page after execution
-        //    //Assert.AreEqual("Index", result.RouteValues["Action"]);
-           
-
-
-        //    //Checking if Delete method redirects to Index() page after execution
-        //    Assert.IsNotNull(result);
-        
-
-        //}
 
     }
 }

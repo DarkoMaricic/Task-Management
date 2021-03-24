@@ -18,10 +18,7 @@ namespace TaskManagement.Buisness
             using (var context = new ApplicationDbContext())
             {
                 var projects = context.Projects.Include(p => p.User).ToList();
-                //foreach (var project in projects) {
-                //    var user = context.Users.FirstOrDefault(u => u.Id == project.UserId);
-                //    project.User = user;
-                //} 
+
                 return projects;
             }
         }
@@ -45,7 +42,7 @@ namespace TaskManagement.Buisness
             }
         }
 
-       
+
         public static void AddProject(Project project)
         {
             using (var context = new ApplicationDbContext())
@@ -151,7 +148,7 @@ namespace TaskManagement.Buisness
             {
 
                 var statuses = context.Status.ToList();
-            
+
 
                 foreach (var status in statuses)
                 {
@@ -178,23 +175,21 @@ namespace TaskManagement.Buisness
         }
 
 
-
-
-
-        public static List<Tasks> GetTasksForUser( string currentUserId) {
+        public static List<Tasks> GetTasksForUser(string currentUserId)
+        {
             using (var context = new ApplicationDbContext())
             {
-               
-                    //They share same list that is filtered by two conditions:
-                    //1. Task must have no assignee
-                    //2. Task must be assigned to him
-                    var tasks = context.Tasks.Where(t => (t.UserId == currentUserId || t.UserId == null)).Include(t => t.Project).Include(t => t.Status).Include(t => t.User).ToList();
-                    return tasks;
-                
+
+                //They share same list that is filtered by two conditions:
+                //1. Task must have no assignee
+                //2. Task must be assigned to him
+                var tasks = context.Tasks.Where(t => (t.UserId == currentUserId || t.UserId == null)).Include(t => t.Project).Include(t => t.Status).Include(t => t.User).ToList();
+                return tasks;
+
             }
 
         }
-    
+
 
 
 
@@ -217,7 +212,8 @@ namespace TaskManagement.Buisness
             }
         }
 
-        public static int GetNumberOfTasksOfUser(String userId) {
+        public static int GetNumberOfTasksOfUser(String userId)
+        {
             var counter = 0;
             using (var context = new ApplicationDbContext())
             {
@@ -229,7 +225,7 @@ namespace TaskManagement.Buisness
                     {
                         counter += 1;
                     }
-                     
+
                 }
             }
             return counter;
@@ -293,7 +289,7 @@ namespace TaskManagement.Buisness
         {
             using (var context = new ApplicationDbContext())
             {
-                var user = context.Users.FirstOrDefault( u => u.UserName == userName);
+                var user = context.Users.FirstOrDefault(u => u.UserName == userName);
                 return user;
             }
         }
@@ -353,29 +349,22 @@ namespace TaskManagement.Buisness
             }
         }
 
-        //public static void AddUser(ApplicationUser user)
-        //{
-        //    using (var context = new ApplicationDbContext())
-        //    {
-        //        context.Users.Add(user);
-        //        context.SaveChanges();
-        //    }
-        //}
 
-        public static void AddUser (ApplicationUser user, string password, string roleName)
+        public static void AddUser(ApplicationUser user, string password, string roleName)
         {
             using (var context = new ApplicationDbContext())
             {
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(context));
 
                 var result = userManager.Create(user, password);
-                if (result.Succeeded) {
+                if (result.Succeeded)
+                {
                     userManager.AddToRole(user.Id, roleName);
                 }
-                
+
             }
         }
-        
+
 
 
     }
